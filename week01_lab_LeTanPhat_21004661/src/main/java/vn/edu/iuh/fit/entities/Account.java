@@ -75,4 +75,8 @@ public class Account {
         this.status = status;
     }
 
+    @Override
+    public int hashCode() {
+        return accountId.hashCode();
+    }
 }
