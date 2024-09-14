@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import vn.edu.iuh.fit.entities.Account;
 import vn.edu.iuh.fit.repositories.AccountRepository;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -56,5 +58,10 @@ public class AccountTest {
         account.setPhone("0123456789");
         account.setStatus((byte) 1);
         assertTrue(accountRepository.updateAccount(account));
+    }
+
+    @Test
+    public void testLogin() {
+        assertNotNull(accountRepository.login("met", "123"));
     }
 }

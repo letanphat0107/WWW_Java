@@ -85,4 +85,20 @@ public class AccountRepository {
             return false;
         }
     }
+
+    /**
+     * Login account
+     * @param username
+     * @param password
+     * @return
+     */
+    public Account login(String username, String password) {
+        String mariadbSelect = "SELECT * FROM account WHERE account_id = '" + username + "' AND password = '" + password + "'";
+        try {
+            return (Account) entityManager.createNativeQuery(mariadbSelect, Account.class).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

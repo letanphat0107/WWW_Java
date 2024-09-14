@@ -5,6 +5,8 @@
  */
 package vn.edu.iuh.fit.services;
 
+import vn.edu.iuh.fit.repositories.RoleRepository;
+
 /*
  * @description:
  * @author: Le Tan Phat
@@ -13,4 +15,13 @@ package vn.edu.iuh.fit.services;
  * @version:  1.0
  */
 public class RoleServices {
+    private RoleRepository roleRepository;
+
+    public RoleServices() {
+        this.roleRepository = new RoleRepository();
+    }
+
+    public String getRole (String username) {
+        return roleRepository.getRoleNameById(username);
+    }
 }

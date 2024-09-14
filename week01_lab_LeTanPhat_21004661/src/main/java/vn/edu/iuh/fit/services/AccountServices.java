@@ -5,6 +5,9 @@
  */
 package vn.edu.iuh.fit.services;
 
+import vn.edu.iuh.fit.entities.Account;
+import vn.edu.iuh.fit.repositories.AccountRepository;
+
 /*
  * @description:
  * @author: Le Tan Phat
@@ -13,4 +16,17 @@ package vn.edu.iuh.fit.services;
  * @version:  1.0
  */
 public class AccountServices {
+
+    AccountRepository accountRepository;
+
+    public AccountServices() {
+        this.accountRepository = new AccountRepository();
+    }
+    public Account login(String username, String password) {
+        Account account = accountRepository.login(username, password);
+        if (account != null) {
+            return account;
+        }
+        return null;
+    }
 }
