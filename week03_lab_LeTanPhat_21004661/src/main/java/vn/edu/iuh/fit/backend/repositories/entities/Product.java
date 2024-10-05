@@ -10,7 +10,6 @@ import jakarta.validation.constraints.Size;
         @NamedQuery(name = "Product.findAll", query = "select p from Product p"),
         @NamedQuery(name = "Product.findById", query = "select p from Product p where p.id = :id")
 })
-
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,4 +62,12 @@ public class Product {
         this.imgPath = imgPath;
     }
 
+    public Product(String name, String description, String imgPath) {
+        this.name = name;
+        this.description = description;
+        this.imgPath = imgPath;
+    }
+
+    public Product() {
+    }
 }

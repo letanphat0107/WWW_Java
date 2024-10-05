@@ -1,18 +1,17 @@
 package vn.edu.iuh.fit.backend.api;
 
-import jakarta.ejb.EJB;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
+import org.jboss.weld.context.ejb.Ejb;
 import vn.edu.iuh.fit.backend.business.ProductBean;
 import vn.edu.iuh.fit.backend.repositories.entities.Product;
 
 @Path("/products")
 public class ProductResourse {
-    @EJB
+    @Ejb
     private ProductBean productBean;
 
     @GET

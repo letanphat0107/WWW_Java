@@ -2,43 +2,63 @@ package vn.edu.iuh.fit.backend.business;
 
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import vn.edu.iuh.fit.backend.dtos.ProductDTO;
+import vn.edu.iuh.fit.backend.repositories.ProductPriceRepository;
+import vn.edu.iuh.fit.backend.repositories.ProductRepository;
 import vn.edu.iuh.fit.backend.repositories.entities.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 @LocalBean
 public class ProductBean implements ProductBeanRemote{
-    @PersistenceContext(unitName = "MariaDB")
-    private EntityManager entityManager;
+    @Inject
+    private ProductRepository productRepository;
+    @Inject
+    private ProductPriceRepository productPriceRepository;
 
     @Override
     public void createProduct(Product product) {
-        entityManager.persist(product);
+        productRepository.createProduct(product);
     }
 
     @Override
     public void updateProduct(Product product) {
-        entityManager.merge(product);
+        productRepository.updateProduct(product);
     }
 
     @Override
     public void deleteProduct(Product product) {
-        entityManager.remove(entityManager.merge(product));
+        productRepository.deleteProduct(product);
     }
 
     @Override
-    public Product getProduct(int id) {
-        return entityManager.createNamedQuery("Product.findById", Product.class)
-                .setParameter("id", id)
-                .getSingleResult();
+    public ProductDTO getProduct(int id) {
+        Product product = productRepository.getProduct(id);
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getImgPath(),
+                productPriceRepository.getActiveProductPrice(product.getId()).getValue());
     }
 
     @Override
-    public List<Product> getProducts() {
-        return entityManager.createNamedQuery("Product.findAll", Product.class)
-                .getResultList();
+    public List<ProductDTO> getProducts() {
+        List<Product> products = productRepository.getProducts();
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        for (Product product : products) {
+            productDTOS.add(new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getImgPath(),
+                    productPriceRepository.getActiveProductPrice(product.getId()).getValue()));
+        }
+        return null;
     }
 }

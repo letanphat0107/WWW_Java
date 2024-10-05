@@ -2,11 +2,18 @@ package vn.edu.iuh.fit.backend.repositories.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
 @Table(name = "product_price")
+@NamedQueries({
+        @NamedQuery(name = "ProductPrice.findAll", query = "select p from ProductPrice p"),
+        @NamedQuery(name = "ProductPrice.findById", query = "select p from ProductPrice p where p.product.id = :id"),
+        @NamedQuery(name = "findAActivePriceByProduct", query = "select p from ProductPrice p where p.product.id = :id and p.applyDate <= :date order by p.applyDate desc")
+})
 public class ProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +30,12 @@ public class ProductPrice {
     private Integer productId;
 
     @NotNull
+    @ColumnDefault("current_timestamp()")
     @Column(name = "apply_date", nullable = false)
-    private Instant applyDate;
+    private Timestamp applyDate;
 
     @NotNull
+    @ColumnDefault("0")
     @Column(name = "value", nullable = false)
     private Double value;
 
@@ -58,11 +67,11 @@ public class ProductPrice {
         this.productId = productId;
     }
 
-    public Instant getApplyDate() {
+    public Timestamp getApplyDate() {
         return applyDate;
     }
 
-    public void setApplyDate(Instant applyDate) {
+    public void setApplyDate(Timestamp applyDate) {
         this.applyDate = applyDate;
     }
 
