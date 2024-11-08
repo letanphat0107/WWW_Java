@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidates with pagination</title>
+    <meta charset="UTF-8">
+    <title>Candidates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        div.inline {
+            color: black;
+            float: left;
+            padding: 5px 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        div.inline a.active {
+            background-color: #FBD603;
+            border:1px solid darkred;
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1 class="text-center">LIST CANDIDATES</h1>
+<a th:href="@{/candidates/form-add-candidate}" class="btn btn-outline-warning mb-3">Add new a candidate</a>
+<table class="table table-hover" id="data-table">
+    <thead></thead>
+    <tbody>
+    <!--    iStat là một iteration status giúp cung cấp thông tin về vòng lặp (ví dụ: là số lẻ hay số chẵn, chỉ số vòng lặp).-->
+    <tr th:each="candidate, iStat : ${candidatePage.content}"
+        th:style="${iStat.odd}? 'font-weight: bold;'"
+        th:alt-title="${iStat.even}? 'even' : 'odd'"
+        style="cursor: pointer;">
+        <td th:text="${candidate.id}"></td>
+        <td th:text="${candidate.fullName}"></td>
+        <td th:text="${candidate.dob}"></td>
+        <td th:text="${candidate.address}"></td>
+        <td th:text="${candidate.phone}"></td>
+        <td th:text="${candidate.email}"></td>
+        <td>
+            <a th:href="@{/candidates/form-update-candidate/{id} (id=${candidate.id})}" class="btn btn-outline-primary me-3">Edit</a>
+            <a th:href="@{/candidates/delete/{id} (id=${candidate.id})}" class="btn btn-outline-danger me-3">Delete</a>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+<!-- Chỉ hiển thị phần điều hướng phân trang nếu tổng số trang lớn hơn 0.
+     Nếu pageNumber khớp với trang hiện tại (candidatePage.number + 1 vì candidatePage.number bắt đầu từ 0),
+-->
+<div class="inline" th:if="${candidatePage.getTotalPages() > 0}" th:each="pageNumber : ${pageNumbers}">
+
+    <!--  Có dạng http://localhost:8080/candidates?size=10&page=2  -->
+    <a th:href = "@{/candidates/list_paging(size=${candidatePage.size}, page=${pageNumber})}"
+       th:text="${pageNumber}"
+       th:class="${pageNumber == candidatePage.number + 1} ? active"
+    ></a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="candidateModal" tabindex="-1" aria-labelledby="candidateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="candidateModalLabel">Candidate Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="modalCandidateId"></span></p>
+                <p><strong>Full Name:</strong> <span id="modalCandidateFullName"></span></p>
+                <p><strong>DOB:</strong> <span id="modalCandidateDOB"></span></p>
+                <p><strong>Address:</strong> <span id="modalCandidateAddress"></span></p>
+                <p><strong>Phone:</strong> <span id="modalCandidatePhone"></span></p>
+                <p><strong>Email:</strong> <span id="modalCandidateEmail"></span></p>
+                <h4>Skill</h4>
+                <ul id="modalCandidateSkill"></ul>
+
+                <br/>
+                <h4>Experience</h4>
+                <table class="table table-striped table-bordered" >
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Company Name</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody id="modalCandidateExperience">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    const rows = document.querySelectorAll('#data-table tbody tr');
+
+
+    rows.forEach(row => {
+        row.addEventListener('click', async function () {
+            const candidateId = this.cells[0].innerText;
+
+            const response = await fetch(`http://localhost:8080/api/candidates/${candidateId}`);
+            const data = await response.json();
+
+            document.getElementById('modalCandidateId').innerText = data.id;
+            document.getElementById('modalCandidateFullName').innerText = data.fullName;
+            document.getElementById('modalCandidateDOB').innerText = data.dob;
+            document.getElementById('modalCandidateAddress').innerText ='Number '+data.address.number+', '+ data.address.street + ' street, '+ data.address.city+ ' city, '+ data.address.zipcode+ ', '+ data.address.country;
+            document.getElementById('modalCandidatePhone').innerText = data.phone;
+            document.getElementById('modalCandidateEmail').innerText = data.email;
+
+            const skills = document.getElementById('modalCandidateSkill');
+            skills.innerHTML = '';
+            data.candidateSkills.forEach(skill => {
+                const li = document.createElement('li');
+                li.innerText = skill.skill.skill_name + ' - ' + skill.skill_level;
+                skills.appendChild(li);
+            });
+
+            const experiences = document.getElementById('modalCandidateExperience');
+            experiences.innerHTML = '';
+            data.experiences.forEach(experience => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${experience.role}</td>
+                    <td>${experience.company}</td>
+                    <td>${experience.fromDate}</td>
+                    <td>${experience.toDate}</td>
+                    <td>${experience.work_desc}</td>
+                `;
+                experiences.appendChild(tr);
+            });
+
+            const modal = new bootstrap.Modal(document.getElementById('candidateModal'));
+            modal.show();
+        })
+    })
+
+</script>
+</body>
+</html>

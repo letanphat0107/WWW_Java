@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Jobs</title>
+  <style>
+    div.inline {
+      color: black;
+      float: left;
+      padding: 5px 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    div.inline a.active {
+      background-color: #FBD603;
+      border: 1px solid darkred;
+    }
+
+    .modal-content {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="text-center my-4">All Jobs</h1>
+  <div th:if="${jobPage.size() > 0}">
+    <div th:each="job : ${jobPage}" class="row mb-3 justify-content-center">
+      <div class="col-10 card p-3 shadow-sm">
+        <div class="d-flex align-items-start">
+          <!-- Hình ảnh -->
+          <img src="https://i.ibb.co/RhHCMcG/DALL-E-2024-11-08-12-50-20-A-professional-looking-image-representing-an-IT-company-The-image-include.webp"
+               alt="job image"
+               class="img-fluid me-3"
+               style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+
+          <!-- Nội dung -->
+          <div class="w-100">
+            <!-- Tên công việc -->
+            <p hidden="hidden" th:text="${job.id}" id="id-job"></p>
+            <p hidden="hidden" th:text="${job.getCompany().getAddress()}" id="address"></p>
+
+            <h5 class="mb-2" th:text="${job.jobName}" ></h5>
+
+            <!-- Tên công ty -->
+            <p class="mb-2 text-muted" th:text="${job.getCompany().getCompName()}" id="company-name"></p>
+
+            <!-- Địa chỉ công ty -->
+            <p class="mb-2">
+              <i class="bi bi-geo-alt"></i>
+              <span class="py-1 px-2 rounded" style="background-color: #f4f5f5"
+                    th:text="${job.getCompany().getAddress().getCity()}"></span>
+
+
+              <span class="py-1 px-2 rounded" style="background-color: #f4f5f5">15 triệu</span>
+            </p>
+          </div>
+
+          <!-- Align buttons to the right -->
+          <div class="ms-auto align-items-center">
+            <div style="width: 150px; margin-bottom: 15px">
+              <button class="btn btn-primary">Recruitment</button>
+            </div>
+            <div style="width: 150px" id="modalDetailJob">
+              <button class="btn btn-outline-secondary btn-detail" data-bs-toggle="modal" data-bs-target="#jobModal">View Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:if="${jobPage.size() == 0}" class="text-center">
+    <p>No jobs found for this company.</p>
+  </div>
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="jobModal" tabindex="-1" aria-labelledby="jobModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title text-center" id="jobModalLabel">Job Details</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-start">
+          <!-- Hình ảnh -->
+          <img src="https://i.ibb.co/RhHCMcG/DALL-E-2024-11-08-12-50-20-A-professional-looking-image-representing-an-IT-company-The-image-include.webp"
+               alt="job image"
+               class="img-fluid me-3"
+               style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 15px">
+          <!-- Nội dung -->
+          <div class="w-100">
+            <p hidden="hidden"><strong>ID:</strong> <span id="modalJobId"></span></p>
+            <h5 class="mb-2" id="modalJobName"></h5>
+          </div>
+        </div>
+
+        <h5 class="mb-2" id="modalJobCompany"></h5>
+        <h6>Address</h6>
+        <p class="py-1 px-2 rounded" style="background-color: #f4f5f5;" id="modalJobAddress">
+        </p>
+        <h6>Salary</h6>
+        <p class="py-1 px-2 rounded" style="background-color: #f4f5f5">15 triệu</p>
+
+        <p><strong>Job Description:</strong> <span id="modalJobDescription" style="font-size: 16px"></span></p>
+        <h5>Required Skills:</h5>
+        <ul id="modalJobSkill"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.querySelectorAll('.btn-detail').forEach(button => {
+    button.addEventListener('click', async function () {
+      const card = button.closest('.card');
+      const jobId = card.querySelector('#id-job').textContent;
+      const address = card.querySelector('#address').textContent;
+      const companyName = card.querySelector('#company-name').textContent;
+
+      const response = await fetch(`http://localhost:8080/api/jobs/${jobId}`);
+      const data = await response.json();
+
+      document.getElementById('modalJobId').innerText = data.id;
+      document.getElementById('modalJobName').innerText = data.jobName;
+      document.getElementById('modalJobCompany').innerText = companyName;
+      document.getElementById('modalJobDescription').innerText = data.jobDesc;
+      document.getElementById('modalJobAddress').innerText = address;
+
+      const skills = document.getElementById('modalJobSkill');
+      skills.innerHTML = '';
+      data.applications.forEach(application => {
+        const li = document.createElement('li');
+        li.innerText = application.skill.skill_name + ' - ' + application.skill_level;
+        skills.appendChild(li);
+      })
+
+      const modal = new bootstrap.Modal(document.getElementById('companyModal'));
+      modal.show();
+    })
+
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Company</title>
+  <style>
+    div.inline {
+      color: black;
+      float: left;
+      padding: 5px 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    div.inline a.active {
+      background-color: #FBD603;
+      border: 1px solid darkred;
+    }
+
+    .modal-content {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container py-5">
+  <h1 class="text-center mb-4">Company List</h1>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+    <div class="col" th:each="company : ${companyPage}">
+      <div class="card h-100 shadow-sm" style="cursor: pointer">
+        <img src="https://i.ibb.co/RhHCMcG/DALL-E-2024-11-08-12-50-20-A-professional-looking-image-representing-an-IT-company-The-image-include.webp" class="card-img-top" alt="Company Logo">
+        <div class="card-body text-center">
+          <p hidden="hidden" th:text="${company.id}" id="id-company"></p>
+          <h5 class="card-title" th:text="${company.compName}"></h5>
+          <p class="card-text" th:text="${company.address}"></p>
+          <a th:href="@{/jobs(companyId=${company.id})}">View Job</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="inline" th:if="${companyPage.getTotalPages() > 0}" th:each="pageNumber : ${pageNumbers}">
+
+    <!--  Có dạng http://localhost:8080/candidates?size=10&page=2  -->
+    <a th:href="@{/company/list(size=${companyPage.size}, page=${pageNumber})}"
+       th:text="${pageNumber}"
+       th:class="${pageNumber == companyPage.number + 1} ? active"
+    ></a>
+  </div>
+
+</div>
+
+
+<!--Modal-->
+<div class="modal fade" id="companyModal" tabindex="-1" aria-labelledby="companyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyModalLabel">The detail company information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p hidden="hidden"><strong>ID:</strong> <span id="modalCompanyId"></span></p>
+        <p><strong>Name:</strong> <span id="modalCompanyName"></span></p>
+        <p><strong>Address:</strong> <span id="modalCompanyAddress"></span></p>
+        <p><strong>Email:</strong> <span id="modalCompanyEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="modalCompanyPhone"></span></p>
+        <p><strong>WebUrl: </strong> <span id="modalCompanyWebUrl"></span></p>
+        <p><strong>About:</strong> <span id="modalCompanyAbout"></span></p>
+      </div>
+      <div class="modal-footer d-flex">
+        <a class="btn btn-primary">View Job</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const rows = document.querySelectorAll('.card');
+  rows.forEach(row => {
+    row.addEventListener('click', async function () {
+      const companyId = row.querySelector('#id-company').textContent;
+
+      const response = await fetch(`http://localhost:8080/api/companies/${companyId}`);
+      const data = await response.json();
+
+      document.getElementById('modalCompanyId').innerText = data.id;
+      document.getElementById('modalCompanyName').innerText = data.compName;
+      document.getElementById('modalCompanyAddress').innerText = 'Number ' + data.address.number + ', ' + data.address.street + ' street, ' + data.address.city + ' city, ' + data.address.zipcode + ', ' + data.address.country;
+      document.getElementById('modalCompanyEmail').innerText = data.email;
+      document.getElementById('modalCompanyPhone').innerText = data.phone;
+      document.getElementById('modalCompanyWebUrl').innerText = data.webUrl;
+      document.getElementById('modalCompanyAbout').innerText = data.about;
+
+      const viewJobLink = document.querySelector('.modal-footer .btn-primary');
+      viewJobLink.href = `/jobs?companyId=${companyId}`;
+
+      const modal = new bootstrap.Modal(document.getElementById('companyModal'));
+      modal.show();
+    })
+
+  })
+</script>
+</body>
+</html>
