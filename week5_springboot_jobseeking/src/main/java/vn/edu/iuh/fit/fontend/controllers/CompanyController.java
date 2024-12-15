@@ -2,13 +2,20 @@ package vn.edu.iuh.fit.fontend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import vn.edu.iuh.fit.backend.models.Candidate;
 import vn.edu.iuh.fit.backend.models.Company;
+import vn.edu.iuh.fit.backend.services.ICandidateService;
 import vn.edu.iuh.fit.backend.services.ICompanyService;
+import vn.edu.iuh.fit.backend.services.ISkillService;
+import vn.edu.iuh.fit.backend.services.impl.CandidateService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +26,13 @@ import java.util.stream.IntStream;
 public class CompanyController {
     @Autowired
     private ICompanyService companyService;
+
+
+    private ICandidateService candidateService;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private ISkillService skillService;
 
     @GetMapping("/list")
     public String showCompaniesListPaging(Model model, @RequestParam("page") Optional<Integer> page,

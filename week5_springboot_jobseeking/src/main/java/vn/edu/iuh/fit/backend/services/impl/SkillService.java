@@ -29,7 +29,7 @@ public class SkillService implements ISkillService {
     }
 
     @Override
-    public Optional<Skill> getSkillById(Long id) {
-        return skillRepository.findById(id);
+    public Skill getSkillById(Long id) {
+        return skillRepository.findById(id).orElse(null);
     }
 }

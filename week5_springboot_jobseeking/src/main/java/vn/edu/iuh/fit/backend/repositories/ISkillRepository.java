@@ -6,4 +6,5 @@ import vn.edu.iuh.fit.backend.models.Skill;
 
 @Repository
 public interface ISkillRepository extends JpaRepository<Skill, Long> {
+
 }

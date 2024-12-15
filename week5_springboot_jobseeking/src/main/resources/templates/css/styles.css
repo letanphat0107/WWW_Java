@@ -1,0 +1,87 @@
+/* To ensure the layout fits well on all screen sizes */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background and container styling */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(45deg, #4e73df, #1cc88a); /* Gradient background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
+
+/* Center the login form and style */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Title style */
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Form elements */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4e73df; /* Blue border on focus */
+}
+
+/* Submit button style */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4e73df;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2e59d9; /* Darker blue when hovered */
+}
+
+/* Link style */
+.register-link {
+    color: #4e73df;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}

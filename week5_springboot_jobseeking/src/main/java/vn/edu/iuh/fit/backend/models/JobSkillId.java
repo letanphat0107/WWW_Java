@@ -20,6 +20,22 @@ public class JobSkillId implements Serializable {
     @Column(name = "skill_id", nullable = false)
     private Long skillId;
 
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
+    public Long getSkillId() {
+        return skillId;
+    }
+
+    public void setSkillId(Long skillId) {
+        this.skillId = skillId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

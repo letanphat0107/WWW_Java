@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gợi Ý Công Việc Phù Hợp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Toàn bộ thanh điều hướng */
+    .navbar {
+      background-color: #007bff; /* Màu xanh lam chủ đạo */
+      padding: 10px 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+    }
+
+    .navbar-brand {
+      color: #fff; /* Màu trắng cho logo */
+      font-size: 1.5em;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .navbar-brand:hover {
+      color: #e9ecef; /* Màu trắng nhạt khi hover */
+    }
+
+    .navbar-toggler {
+      border-color: #e9ecef; /* Màu cho nút menu toggle */
+    }
+
+    .navbar-toggler-icon {
+      filter: invert(1); /* Đổi màu thành trắng */
+    }
+
+    /* Menu điều hướng */
+    .navbar-nav .nav-item .nav-link {
+      color: #fff; /* Màu trắng cho liên kết */
+      font-size: 1.1em;
+      margin-right: 15px;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+      color: #e9ecef; /* Màu trắng nhạt khi hover */
+      text-decoration: underline;
+    }
+
+    .navbar-nav .nav-item .nav-link.active {
+      font-weight: bold;
+      text-decoration: underline; /* Nhấn mạnh cho mục đang chọn */
+    }
+
+    /* Đảm bảo thanh điều hướng hiển thị đẹp trên thiết bị nhỏ */
+    @media (max-width: 992px) {
+      .navbar {
+        padding: 10px;
+      }
+
+      .navbar-nav .nav-item {
+        margin-bottom: 10px;
+      }
+    }
+
+    /* Toàn cục */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #4e73df, #1cc88a);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Thanh điều hướng */
+    .navbar {
+      background: linear-gradient(45deg, #4e73df, #1cc88a);
+    }
+
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+      color: white;
+    }
+
+    .navbar .nav-link:hover {
+      color: #d9d9d9;
+      text-decoration: underline;
+    }
+
+    .navbar .navbar-toggler {
+      border-color: white;
+    }
+
+    .navbar .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    /* Tiêu đề */
+    h1 {
+      color: #343a40;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Danh sách công việc */
+    .list-group-item {
+      background-color: white;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      padding: 20px;
+    }
+
+    .list-group-item h3 {
+      color: #007bff;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .list-group-item p {
+      margin: 5px 0;
+      font-size: 1em;
+      color: #495057;
+    }
+
+    /* Không có công việc phù hợp */
+    p {
+      text-align: center;
+      color: #6c757d;
+      font-size: 1.2em;
+    }
+
+    /* Khoảng cách container */
+    .container {
+      margin-top: 50px;
+      max-width: 800px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Nút */
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Phần footer (nếu cần) */
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      margin-top: 30px;
+    }
+  .textBlack{
+    color: black;
+  }
+  </style>
+</head>
+<body>
+<!-- Thanh Điều Hướng -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Trang Chủ</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/candidate/profile">Thông Tin Cá Nhân</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/candidate/job-suggestions">Gợi Ý Công Việc</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Đăng Xuất</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container mt-5">
+  <h1>Gợi Ý Công Việc Phù Hợp</h1>
+  <p>Các công việc phù hợp với kỹ năng của bạn:</p>
+
+  <div class="list-group">
+    <th:block th:each="job : ${suggestedJobs}">
+      <a href="#" class="list-group-item list-group-item-action">
+        <h5 class="mb-1" th:text="${job.jobName}"></h5>
+        <p class="mb-1" th:text="${job.jobDesc}"></p>
+        <small>Company: <span th:text="${job.company.compName}"></span></small>
+      </a>
+    </th:block>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -3,32 +3,29 @@ package vn.edu.iuh.fit.fontend.controllers;
 import com.neovisionaries.i18n.CountryCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import vn.edu.iuh.fit.backend.models.Address;
-import vn.edu.iuh.fit.backend.models.Candidate;
-import vn.edu.iuh.fit.backend.models.CandidateSkill;
-import vn.edu.iuh.fit.backend.models.Experience;
+import vn.edu.iuh.fit.backend.models.*;
 import vn.edu.iuh.fit.backend.repositories.IAddressRepository;
 import vn.edu.iuh.fit.backend.repositories.ICandidateRepository;
-import vn.edu.iuh.fit.backend.services.ICandidateSkillService;
-import vn.edu.iuh.fit.backend.services.IExperienceService;
-import vn.edu.iuh.fit.backend.services.ISkillService;
-import vn.edu.iuh.fit.backend.services.impl.CandidateService;
+import vn.edu.iuh.fit.backend.repositories.ICompanyRepository;
+import vn.edu.iuh.fit.backend.repositories.IJobRepository;
+import vn.edu.iuh.fit.backend.services.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.security.Principal;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/candidate")
 public class CandidateController {
     @Autowired
-    private CandidateService candidateService;
+    private ICandidateService candidateService;
 
     @Autowired
     public ICandidateRepository candidateRepository;
@@ -44,6 +41,16 @@ public class CandidateController {
 
     @Autowired
     private IExperienceService experienceService;
+
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private  ICompanyService companyService;
+    @Autowired
+    private ICompanyRepository companyRepository;
+    @Autowired IJobService jobService;
+    @Autowired
+    private IJobRepository jobRepository;
 
     @GetMapping("/list")
     public String showCandidateList(Model model) {
@@ -145,5 +152,87 @@ public class CandidateController {
         Candidate candidate = candidateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid candidate Id:" + id));
         candidateRepository.delete(candidate);
         return "redirect:/candidates/list_paging";
+    }
+
+    @GetMapping("/find-candidates")
+    public String findCandidates(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        // Lấy công ty đang đăng nhập
+        Company company = companyRepository.findCompanyByCompName(userDetails.getUsername());
+
+        // Lấy danh sách công việc mà công ty đã đăng
+        List<Job> jobs = jobRepository.findJobByCompanyId(company.getId());
+
+        // Lấy danh sách kỹ năng cần tìm từ công việc
+        Set<Long> requiredSkillIds = new HashSet<>();
+        for (Job job : jobs) {
+            for (JobSkill jobSkill : job.getJobSkills()) {
+                requiredSkillIds.add(jobSkill.getSkill().getId());
+            }
+        }
+
+        // Tìm các ứng viên có kỹ năng phù hợp
+        List<Candidate> candidates = candidateService.findCandidatesBySkills(requiredSkillIds);
+
+        // Gửi thông tin đến view
+        model.addAttribute("candidates", candidates);
+        model.addAttribute("company", company);
+        return "candidates/find-candidates";
+    }
+
+    @PostMapping("/send-invites")
+    public String sendInvites(@RequestParam List<Long> candidateIds, @AuthenticationPrincipal UserDetails userDetails, Model model) {
+        // Lấy công ty đang đăng nhập
+        Company company = companyRepository.findCompanyByCompName(userDetails.getUsername());
+
+        // Gửi email cho từng ứng viên
+        for (Long candidateId : candidateIds) {
+            Candidate candidate = candidateService.getCandidate(candidateId);
+            emailService.sendInvitationEmail(candidate.getEmail(), company.getCompName());
+        }
+
+        model.addAttribute("message", "Đã gửi email mời đến các ứng viên.");
+        return "redirect:/company/find-candidates";
+    }
+
+
+    @GetMapping("/job-suggestions")
+    public String getJobSuggestions(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        // Lấy thông tin ứng viên từ tên đăng nhập
+        Candidate candidate = candidateRepository.findCandidateByFullName(userDetails.getUsername());
+        if (candidate == null) {
+            model.addAttribute("error", "Không tìm thấy thông tin ứng viên.");
+            return "candidates/error"; // Trang lỗi nếu không tìm thấy ứng viên
+        }
+
+        // Lấy danh sách kỹ năng của ứng viên
+        List<Skill> candidateSkills = candidateService.getSkillsForCandidate(candidate.getId());
+
+        // Lấy các công việc phù hợp với kỹ năng của ứng viên
+        List<Job> suggestedJobs = jobService.findJobsBySkills(candidateSkills);
+
+        model.addAttribute("suggestedJobs", suggestedJobs);
+        return "candidates/job-suggestions"; // Chuyển đến trang hiển thị công việc gợi ý
+    }
+
+    @GetMapping("/skill-suggestions")
+    public String suggestSkills(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Candidate candidate = candidateRepository.findCandidateByFullName(userDetails.getUsername());
+        if (candidate == null) {
+            return "error"; // Xử lý lỗi nếu ứng viên không tồn tại
+        }
+
+        // Lấy danh sách các kỹ năng mà ứng viên đã có
+        List<Skill> existingSkills = candidateService.getSkillsForCandidate(candidate.getId());
+
+        // Lấy tất cả các kỹ năng trong hệ thống
+        List<Skill> allSkills = skillService.getAllSkills();
+
+        // Lọc các kỹ năng mà ứng viên chưa có
+        List<Skill> suggestedSkills = allSkills.stream()
+                .filter(skill -> !existingSkills.contains(skill))
+                .collect(Collectors.toList());
+
+        model.addAttribute("suggestedSkills", suggestedSkills);
+        return "candidates/skill-suggestions";
     }
 }

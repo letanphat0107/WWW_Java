@@ -9,55 +9,93 @@
 
 </head>
 <body>
-<div class="container py-5">
-    <h1 class="text-center mb-4">Company List</h1>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-        <!-- Company 1 -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Company A</h5>
-                    <p class="card-text">123 Street, City</p>
-                    <a href="#" class="btn btn-primary">View Job</a>
-                </div>
+<!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JobPortal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Company Features -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Công Ty
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/jobs/post-job">Đăng Tin Tuyển Dụng</a></li>
+                            <li><a class="dropdown-item" href="/company/find-candidates">Tìm Ứng Viên & Gửi Mail</a></li>
+                        </ul>
+                    </li>
+                    <!-- Candidate Features -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="candidateDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Ứng Viên
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="candidateDropdown">
+                            <li><a class="dropdown-item" href="/candidate/job-suggestions">Gợi Ý Công Việc Phù Hợp</a></li>
+                            <li><a class="dropdown-item" href="/candidate/skill-suggestions">Đề Xuất Kỹ Năng Cần Học</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
-        <!-- Company 2 -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Company B</h5>
-                    <p class="card-text">456 Avenue, City</p>
-                    <a href="#" class="btn btn-primary">View Job</a>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Welcome to JobPortal!</h1>
+        <p>Chọn chức năng từ thanh điều hướng để tiếp tục.</p>
+    </div>
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Company List</h1>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+            <!-- Company 1 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Company A</h5>
+                        <p class="card-text">123 Street, City</p>
+                        <a href="/candidate/list" class="btn btn-primary">View Job</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- Company 3 -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Company C</h5>
-                    <p class="card-text">789 Boulevard, City</p>
-                    <a href="#" class="btn btn-primary">View Job</a>
+            <!-- Company 2 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Company B</h5>
+                        <p class="card-text">456 Avenue, City</p>
+                        <a href="/candidate/list" class="btn btn-primary">View Job</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- Company 4 -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Company D</h5>
-                    <p class="card-text">101 Main St, City</p>
-                    <a href="#" class="btn btn-primary">View Job</a>
+            <!-- Company 3 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Company C</h5>
+                        <p class="card-text">789 Boulevard, City</p>
+                        <a href="/candidate/list" class="btn btn-primary">View Job</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Company 4 -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Company Logo">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Company D</h5>
+                        <p class="card-text">101 Main St, City</p>
+                        <a href="/candidate/list" class="btn btn-primary">View Job</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.iuh.fit.backend.models.Job;
 import vn.edu.iuh.fit.backend.services.IJobService;
-import vn.edu.iuh.fit.backend.services.impl.JobService;
 
 import java.util.List;
 

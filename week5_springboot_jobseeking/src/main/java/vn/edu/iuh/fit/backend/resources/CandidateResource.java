@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.iuh.fit.backend.models.Candidate;
 import vn.edu.iuh.fit.backend.services.ICandidateService;
-import vn.edu.iuh.fit.backend.services.impl.CandidateService;
 
 import java.util.List;
 

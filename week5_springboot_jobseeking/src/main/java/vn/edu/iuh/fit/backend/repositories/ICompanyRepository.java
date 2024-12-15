@@ -6,4 +6,5 @@ import vn.edu.iuh.fit.backend.models.Company;
 
 @Repository
 public interface ICompanyRepository extends JpaRepository<Company,Long> {
+    public Company findCompanyByCompName(String compName);
 }

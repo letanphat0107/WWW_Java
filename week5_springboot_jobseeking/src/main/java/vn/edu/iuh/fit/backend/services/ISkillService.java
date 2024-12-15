@@ -11,5 +11,5 @@ public interface ISkillService {
     Skill addSkill(Skill skill);
     List<Skill> getAllSkills();
     List<Skill> suggestSkillsForCandidate(Long candidateId);
-    Optional<Skill> getSkillById(Long id);
+    Skill getSkillById(Long id);
 }
