@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Find candidates by Company Name</h1>
+    <form action="/candidate/workIn" method="get">
+        <label for="companyName">Company Name:</label>
+        <input type="text" id="companyName" name="companyName">
+        <button type="submit">Find</button>
+    </form>
+    <div th:if="${candidates}">
+        <h2>Candidates</h2>
+        <table >
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+            <tr th:each="candidate : ${candidates}">
+                <td th:text="${candidate.fullname}"></td>
+                <td th:text="${candidate.email}"></td>
+                <td th:text="${candidate.phone}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
