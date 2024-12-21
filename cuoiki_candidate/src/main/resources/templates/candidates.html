@@ -21,7 +21,10 @@
             <td th:text="${candidate.phone}"></td>
             <td>
                 <a th:href="@{/candidate/detail/{id}(id=${candidate.id})}">Details</a>
+                <a th:href="@{/candidate/edit/{id}(id=${candidate.id})}">Edit</a>
+                <a th:href="@{/candidate/delete/{id}(id=${candidate.id})}">Delete</a>
             </td>
         </tr>
+    </table>
 </body>
 </html>

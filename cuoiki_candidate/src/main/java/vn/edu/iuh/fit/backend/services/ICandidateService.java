@@ -12,4 +12,7 @@ public interface ICandidateService {
     public Candidate findById(Long id);
     public List<Candidate> findByCompanyName(String companyName);
     public List<Candidate> findByWorkExperienceGraterThan(int exp);
+
+    public Boolean save(Candidate candidate);
+    public void deleteById(Long id);
 }

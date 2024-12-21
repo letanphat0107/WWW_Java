@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Find candidates by Company Name</h1>
-    <form action="/candidate/workIn" method="get">
+    <form th:action="@{/candidate/workIn}" method="get">
         <label for="companyName">Company Name:</label>
         <input type="text" id="companyName" name="companyName">
         <button type="submit">Find</button>

@@ -3,10 +3,8 @@ package vn.edu.iuh.fit.fontend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import vn.edu.iuh.fit.backend.models.Candidate;
 import vn.edu.iuh.fit.backend.services.ICandidateService;
 import vn.edu.iuh.fit.fontend.models.CandidateModel;
 
@@ -47,4 +45,28 @@ public class CandidateController {
         return "report2";
     }
 
+    @GetMapping("/goToAdd")
+    public String goToAddForm(Model model) {
+        model.addAttribute("candidate", new Candidate());
+        return "add_candidate";
+    }
+
+    @PostMapping("/save")
+    public String save(Model model, @ModelAttribute("candidate") Candidate candidate) {
+        candidateService.save(candidate);
+        return "redirect:/candidate/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(Model model, @PathVariable Long id) {
+        System.out.println("Delete id: " + id);
+        candidateService.deleteById(id);
+        return "redirect:/main";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable Long id) {
+        model.addAttribute("candidate", candidateService.findById(id));
+        return "add_candidate";
+    }
 }

@@ -21,8 +21,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.csrf().disable()
                 .authorizeRequests()
                 .requestMatchers("/login", "/css/**", "/js/**").permitAll() // Cho phép truy cập trang login và các tài nguyên tĩnh
                 .requestMatchers("/main").authenticated() // Yêu cầu đăng nhập để vào trang main

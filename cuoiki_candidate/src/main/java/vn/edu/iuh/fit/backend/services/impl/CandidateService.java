@@ -33,4 +33,17 @@ public class CandidateService implements ICandidateService {
     public List<Candidate> findByWorkExperienceGraterThan(int exp) {
         return candidateRepository.findByWorkExperienceGraterThan(exp);
     }
+
+    @Override
+    public Boolean save(Candidate candidate) {
+        return candidateRepository.save(candidate) != null;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!candidateRepository.existsById(id)) {
+            return;
+        }
+        candidateRepository.deleteById(id);
+    }
 }

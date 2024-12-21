@@ -5,8 +5,30 @@
   <title>Title</title>
 </head>
 <body>
-  <a href="candidate/list">Go to Candidates</a>
-  <a href="candidate/goToReport1">Go to Find candidates by Company Name</a>
-  <a href="candidate/workExp/5">Go to List candidate have experience grater than 5 year</a>
+  <a th:href="@{/candidate/list}">Go to Candidates</a>
+  <a th:href="@{/candidate/goToReport1}">Go to Find candidates by Company Name</a>
+  <a th:href="@{/candidate/workExp/5}">Go to List candidate have experience grater than 5 year</a>
+  <a th:href="@{/candidate/goToAdd}">Go to Add Candidate</a>
+  <h1>Candidates</h1>
+  <table border="1">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Actions</th>
+    </tr>
+    <tr th:each="candidate : ${candidates}">
+      <td th:text="${candidate.id}"></td>
+      <td th:text="${candidate.fullname}"></td>
+      <td th:text="${candidate.email}"></td>
+      <td th:text="${candidate.phone}"></td>
+      <td>
+        <a th:href="@{/candidate/detail/{id}(id=${candidate.id})}">Details</a>
+        <a th:href="@{/candidate/edit/{id}(id=${candidate.id})}">Edit</a>
+        <a th:href="@{/candidate/delete/{id}(id=${candidate.id})}">Delete</a>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
